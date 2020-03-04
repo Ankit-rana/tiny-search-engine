@@ -5,6 +5,10 @@ import asyncio
 URLList = []
 COUNT = 0
 
+async def get_link(urls):
+    for url in urls:
+        yield url
+
 async def main():
     global COUNT
     if len(sys.argv) != 4:
@@ -18,7 +22,7 @@ async def main():
     URLList.append(baseurl)
 
     # TODO: make each iteration as task
-    for link in URLList:
+    async for link in get_link(URLList):
         if not link.startswith('http'):
             continue
         ## get the html page

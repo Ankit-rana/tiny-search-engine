@@ -11,7 +11,7 @@ async def get_content(link):
     # result = webUrl.read()
     # asyncio will not really work if you are not using library which supports async
     async with httpx.AsyncClient() as client:
-        result = await client.get('https://www.example.org/')
+        result = await client.get(link)
     return result.text
 
 def write_content(*args):
