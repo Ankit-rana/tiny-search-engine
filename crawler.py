@@ -9,6 +9,24 @@ async def get_link(urls):
     for url in urls:
         yield url
 
+async def url_logic(url,i,depth, destination):
+    urls = []
+    if i == depth or not url.startswith('http'):
+        return
+    ## get the html page
+    data = await get_content(url)
+
+    ## find out the links in the page and add it to a list
+    find_links(data, urls) if depth > 0 else sys.exit(1)
+
+    ## print in the file (url,depth,content)
+    global COUNT
+    COUNT = write_content(url, str(depth), data, destination, COUNT)
+
+    print(urls)
+    async for u in get_link(urls):
+        await url_logic(u, i+1, depth, destination)
+
 async def main():
     global COUNT
     if len(sys.argv) != 4:
@@ -19,34 +37,7 @@ async def main():
     destination = sys.argv[2]
     depth = int(sys.argv[3])
 
-    URLList.append(baseurl)
-
-    # TODO: make each iteration as task
-    async for link in get_link(URLList):
-        if not link.startswith('http'):
-            continue
-        ## get the html page
-        ## made it async because this requires IO bound work ie. get data over network
-        ## common mistake:
-        ## $ python3.7 crawler.py 
-        ## File "crawler.py", line 26
-        ## await data = get_content(link)
-        ## ^
-        ## SyntaxError: can't assign to await expression
-
-        data = await get_content(link)
-
-        ## find out the links in the page and add it to a list
-        ## avoided to make this async because this is not a IO bound work
-        find_links(data, URLList) if depth > 0 else sys.exit(1)
-
-        ## print in the file (url,depth,content)
-        ## avoided this due to lack of asyncio in linux 
-        ## https://stackoverflow.com/questions/87892/what-is-the-status-of-posix-asynchronous-i-o-aio
-        COUNT = write_content(link, str(depth), data, destination, COUNT)
-
-        ## depth--
-        depth -= 1
+    await url_logic(baseurl, 0, depth, destination)
 
 if __name__ == "__main__":
     asyncio.run(main())
