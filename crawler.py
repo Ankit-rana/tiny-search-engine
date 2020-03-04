@@ -5,10 +5,6 @@ import asyncio
 URLList = []
 COUNT = 0
 
-async def get_link(urls):
-    for url in urls:
-        yield url
-
 async def url_logic(url,i,depth, destination):
     urls = []
     if i == depth:
@@ -29,8 +25,9 @@ async def url_logic(url,i,depth, destination):
     COUNT = write_content(url, str(depth), data, destination, COUNT)
 
     tasks = []
-    async for u in get_link(urls):
+    for u in urls:
         tasks.append(asyncio.create_task(url_logic(u, i+1, depth, destination)))
+
     await asyncio.gather(*tasks)
 
 
