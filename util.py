@@ -10,8 +10,8 @@ async def get_content(link):
     # webUrl = urllib2.urlopen(link)
     # result = webUrl.read()
     # asyncio will not really work if you are not using library which supports async
-    client = httpx.AsyncClient()
-    result = await client.get('https://www.example.org/')
+    async with httpx.AsyncClient() as client:
+        result = await client.get('https://www.example.org/')
     return result.text
 
 def write_content(*args):
