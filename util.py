@@ -1,22 +1,26 @@
-import urllib2
+#import urllib2
 import sys
 from bs4 import BeautifulSoup
 import os
 import re
 import pickle
+import httpx
 
-
-def get_content(link):
-    webUrl = urllib2.urlopen(link)
-    return  webUrl.read()
+async def get_content(link):
+    # webUrl = urllib2.urlopen(link)
+    # result = webUrl.read()
+    # asyncio will not really work if you are not using library which supports async
+    client = httpx.AsyncClient()
+    result = await client.get('https://www.example.org/')
+    return result.text
 
 def write_content(*args):
     # TODO:
     COUNT = args[4]
     COUNT = COUNT + 1
     file = open(args[-2] + "/" + str(COUNT) + ".html","w")
-    data = args[0] + "\n" + args[1] + "\n" + args[2].decode("utf-8")
-    file.write(data.encode("utf-8"))
+    data = args[0] + "\n" + args[1] + "\n" + args[2]
+    file.write(data)
     file.close()
     return COUNT
 
