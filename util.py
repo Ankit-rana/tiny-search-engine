@@ -1,4 +1,3 @@
-#import urllib2
 import sys
 from bs4 import BeautifulSoup
 import os
@@ -10,12 +9,16 @@ async def get_content(link):
     # webUrl = urllib2.urlopen(link)
     # result = webUrl.read()
     # asyncio will not really work if you are not using library which supports async
-    async with httpx.AsyncClient() as client:
+    try:
+        client = httpx.AsyncClient()
         result = await client.get(link)
+    except Exception:
+        return ''
+    finally:
+        await client.aclose() 
     return result.text
 
 def write_content(*args):
-    # TODO:
     COUNT = args[4]
     COUNT = COUNT + 1
     file = open(args[-2] + "/" + str(COUNT) + ".html","w")

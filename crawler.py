@@ -9,6 +9,8 @@ async def url_logic(url,i,depth, destination):
     urls = []
     if i == depth:
         return
+    if not url:
+        return
     if not url.startswith('http'):
         return
     ## get the html page
@@ -27,7 +29,7 @@ async def url_logic(url,i,depth, destination):
     tasks = []
     for u in urls:
         tasks.append(asyncio.create_task(url_logic(u, i+1, depth, destination)))
-
+  
     await asyncio.gather(*tasks)
 
 
