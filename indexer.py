@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from util import get_data_without_tags, parse_data_into_words, store_to_ds, store_to_file
+from util import get_data_without_tags, parse_data_into_words, update_index, write_index_to_file
 from bs4 import BeautifulSoup
 import sys
 import os
@@ -18,8 +18,8 @@ def main(target_dir, result):
         with open(target_dir + '/' + file,"r") as f:
             data = get_data_without_tags("\n".join(f.readlines()[2:]))
             words =  parse_data_into_words(data)
-            store_to_ds(words, file, map)
-    store_to_file(result, map)
+            update_index(words, file, map)
+    write_index_to_file(result, map)
   
 
 if __name__ == "__main__":

@@ -5,9 +5,7 @@ import re
 import pickle
 import httpx
 
-async def get_content(link):
-    # webUrl = urllib2.urlopen(link)
-    # result = webUrl.read()
+async def read_content(link):
     # asyncio will not really work if you are not using library which supports async
     try:
         client = httpx.AsyncClient()
@@ -27,26 +25,17 @@ def write_content(*args):
     file.close()
     return COUNT
 
-def find_links(content, URLList):
-    soup = BeautifulSoup(content, 'html.parser')
-    for link in soup.find_all('a'):
-        if link not in URLList:
-            URLList.append(link.get('href'))
-
-def store_to_file(file, map):
+def write_index_to_file(file, map):
     with open(file,'w') as f:
         f.write(pickle.dumps(map))
 
-def read_from_file(file):
+def read_index_from_file(file):
     f = open(file,'r')
     map = pickle.load(f)
     return map
 
-def find_occurance(word, words):
-    return words.count(word)
-
 # Creating a datastructure to store the data from different files
-def store_to_ds(words, file, map):
+def update_index(words, file, map):
     for word in set(words):
         ### calculate the frequency of the current word
         occurance = find_occurance(word, words)
@@ -70,9 +59,18 @@ def parse_data_into_words(data):
             [result.append(word.strip()) for word in words]
     return result
 
-#Remove html tags from a string
+# Remove html tags from a string
 def get_data_without_tags(file):
     clean = re.compile('<.*?>')
     return re.sub(clean, '', file)
 
+# Find links in the content and update URLList 
+def find_links(content, URLList):
+    soup = BeautifulSoup(content, 'html.parser')
+    for link in soup.find_all('a'):
+        if link not in URLList:
+            URLList.append(link.get('href'))
+
+def find_occurance(word, words):
+    return words.count(word)
 
