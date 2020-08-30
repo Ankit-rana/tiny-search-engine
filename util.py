@@ -26,11 +26,11 @@ def write_content(*args):
     return COUNT
 
 def write_index_to_file(file, map):
-    with open(file,'w') as f:
-        f.write(pickle.dumps(map))
+    with open(file,'wb') as f:
+        pickle.dump(map, f)
 
 def read_index_from_file(file):
-    f = open(file,'r')
+    f = open(file,'rb')
     map = pickle.load(f)
     return map
 

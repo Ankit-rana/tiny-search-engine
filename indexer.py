@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from util import get_data_without_tags, parse_data_into_words, update_index, write_index_to_file
 from bs4 import BeautifulSoup
 import sys
@@ -13,7 +12,7 @@ def main():
     # Remember index.dat should be reloadable
     # for each file in target dir
     if len(sys.argv) != 3:
-        print "Wrong info passed"
+        print("Wrong info passed")
         sys.exit(1)
 
     global map
