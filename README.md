@@ -21,4 +21,4 @@ Indexer
 sudo python indexer.py <target_directory> <Output_filename>
 
 Query Engine
-sudo python queryEngine.py <Enter string to be searched> <enter output dat file of indexer>
+sudo python queryEngine.py <Enter_string_to_be_searched> <enter_output_dat_file_of_indexer>
