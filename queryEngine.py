@@ -13,9 +13,9 @@ def get_info(index,*args):
         
 def display(data):
     for d in data:
-        with open("/home/ankit/Desktop/ayushi/tiny-search-engine/files/" + d[0], 'r') as f:
+        with open("../data/" + d[0], 'r') as f:
             url = f.readline()
-            print "Document ID:" + d[0] + " URL:" + url.strip()
+            print("Document ID:" + d[0] + " URL:" + url.strip())
         
 def foo(arg):
     return arg[1]
@@ -34,14 +34,14 @@ def get_details(index, word):
     return index.get(word,{}).items()
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("Wrong Info passed")
         sys.exit(1)
 
     output = []
     words = sys.argv[1]
-    index = read_from_file("index.dat")
-
+    filename = sys.argv[2]
+    index = read_index_from_file(filename)
     # find the file and occurance of all files from index for a word
     for word in words.split(' '):
     	output.append(get_details(index, word))

@@ -4,6 +4,8 @@ import asyncio
 
 URLList = []
 COUNT = 0
+loop = asyncio.get_event_loop()
+
 
 async def url_logic(url,i,depth, destination):
     urls = []
@@ -28,7 +30,7 @@ async def url_logic(url,i,depth, destination):
     tasks = []
     print(f"Detected {len(urls)} urls in {url}")
     for u in urls:
-        tasks.append(asyncio.create_task(url_logic(u, i+1, depth, destination)))
+        tasks.append(loop.create_task(url_logic(u, i+1, depth, destination)))
   
     await asyncio.gather(*tasks)
 
@@ -46,5 +48,5 @@ async def main():
     await url_logic(baseurl, 0, depth, destination)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop.run_until_complete(main())
 
